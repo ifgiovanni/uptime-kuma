@@ -243,7 +243,7 @@
             </div>
 
             <!-- Overall Status -->
-            <div :class="['list', 'p-4', 'overall-status', 'mb-4', { 'shadow-box': config.displayMode == 'minimal' }]">
+            <div :class="['list', 'p-4', 'overall-status', 'mb-4', { 'shadow-box': config.displayMode == 'default' }]">
                 <div v-if="Object.keys($root.publicMonitorList).length === 0 && loadedData">
                     <font-awesome-icon icon="question-circle" class="ok" />
                     {{ $t("No Services") }}
@@ -335,8 +335,8 @@
                     <!-- 👀 Nothing here, please add a group or a monitor. -->
                     👀 {{ $t("statusPageNothing") }}
                 </div>
-                <PublicStatusList v-if="config.displayMode === 'default'" :edit-mode="enableEditMode" :show-tags="config.showTags" :show-certificate-expiry="config.showCertificateExpiry" />
-                <PublicGroupList v-if="config.displayMode === 'minimal'" :edit-mode="enableEditMode" :show-tags="config.showTags" :show-certificate-expiry="config.showCertificateExpiry" />
+                <PublicStatusList v-if="config.displayMode === 'minimal'" :edit-mode="enableEditMode" :show-tags="config.showTags" :show-certificate-expiry="config.showCertificateExpiry" />
+                <PublicGroupList v-if="config.displayMode === 'default'" :edit-mode="enableEditMode" :show-tags="config.showTags" :show-certificate-expiry="config.showCertificateExpiry" />
             </div>
 
             <footer class="mt-5 mb-4">
