@@ -22,16 +22,13 @@ export default {
             for (let group of this.publicGroupList) {
                 for (let monitor of group.monitorList) {
                     result[monitor.id] = monitor;
-                    if (monitor.type === "group") {
-                        console.log("group", monitor);
+                    if (monitor.type === "group" && monitor.children) {
                         for (let child of monitor.children) {
-                            console.log("child", child);
                             result[child.id] = child;
                         }
                     }
                 }
             }
-            console.log("publicMonitorList", result);
             return result;
         },
 
@@ -40,12 +37,9 @@ export default {
 
             for (let monitorID in this.publicMonitorList) {
                 if (this.lastHeartbeatList[monitorID]) {
-                    console.log("monitorID", monitorID);
-                    console.log("this.lastHeartbeatList[monitorID]", this.lastHeartbeatList[monitorID]);
                     result[monitorID] = this.lastHeartbeatList[monitorID];
                 }
             }
-            console.log("publicLastHeartbeatList", result);
             return result;
         },
 
