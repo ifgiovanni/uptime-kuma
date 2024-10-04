@@ -51,6 +51,14 @@
                     </select>
                 </div>
 
+                <div class="my-3">
+                    <label for="switch-mode" class="form-label">{{ $t("Display Mode") }}</label>
+                    <select id="switch-mode" v-model="config.displayMode" class="form-select" data-testid="display-mode-select">
+                        <option value="default">{{ $t("Default") }}</option>
+                        <option value="minimal">{{ $t("Minimal") }}</option>
+                    </select>
+                </div>
+
                 <div class="my-3 form-check form-switch">
                     <input id="showTags" v-model="config.showTags" class="form-check-input" type="checkbox" data-testid="show-tags-checkbox">
                     <label class="form-check-label" for="showTags">{{ $t("Show Tags") }}</label>
@@ -177,7 +185,7 @@
             </div>
 
             <!-- Incident -->
-            <div v-if="incident !== null" class="shadow-box alert mb-4 p-4 incident" role="alert" :class="incidentClass" data-testid="incident">
+            <div v-if="incident !== null" class="shadow-box  alert mb-4 p-4 incident" role="alert" :class="incidentClass" data-testid="incident">
                 <strong v-if="editIncidentMode">{{ $t("Title") }}:</strong>
                 <Editable v-model="incident.title" tag="h4" :contenteditable="editIncidentMode" :noNL="true" class="alert-heading" data-testid="incident-title" />
 
@@ -235,7 +243,7 @@
             </div>
 
             <!-- Overall Status -->
-            <div class="shadow-box list  p-4 overall-status mb-4">
+            <div :class="['list', 'p-4', 'overall-status', 'mb-4', { 'shadow-box': config.displayMode == 'minimal' }]">
                 <div v-if="Object.keys($root.publicMonitorList).length === 0 && loadedData">
                     <font-awesome-icon icon="question-circle" class="ok" />
                     {{ $t("No Services") }}
@@ -327,8 +335,8 @@
                     <!-- 👀 Nothing here, please add a group or a monitor. -->
                     👀 {{ $t("statusPageNothing") }}
                 </div>
-
-                <PublicGroupList :edit-mode="enableEditMode" :show-tags="config.showTags" :show-certificate-expiry="config.showCertificateExpiry" />
+                <PublicStatusList v-if="config.displayMode === 'default'" :edit-mode="enableEditMode" :show-tags="config.showTags" :show-certificate-expiry="config.showCertificateExpiry" />
+                <PublicGroupList v-if="config.displayMode === 'minimal'" :edit-mode="enableEditMode" :show-tags="config.showTags" :show-certificate-expiry="config.showCertificateExpiry" />
             </div>
 
             <footer class="mt-5 mb-4">
@@ -378,6 +386,7 @@ import { marked } from "marked";
 import DOMPurify from "dompurify";
 import Confirm from "../components/Confirm.vue";
 import PublicGroupList from "../components/PublicGroupList.vue";
+import PublicStatusList from "../components/PublicStatusList.vue";
 import MaintenanceTime from "../components/MaintenanceTime.vue";
 import { getResBaseURL } from "../util-frontend";
 import { STATUS_PAGE_ALL_DOWN, STATUS_PAGE_ALL_UP, STATUS_PAGE_MAINTENANCE, STATUS_PAGE_PARTIAL_DOWN, UP, MAINTENANCE } from "../util.ts";
@@ -400,6 +409,7 @@ export default {
 
     components: {
         PublicGroupList,
+        PublicStatusList,
         ImageCropUpload,
         Confirm,
         PrismEditor,
@@ -654,6 +664,10 @@ export default {
         "config.theme"() {
             this.$root.statusPageTheme = this.config.theme;
             this.loadedTheme = true;
+        },
+
+        "config.displayMode"() {
+            this.$root.statusPageDisplayMode = this.config.display_mode;
         },
 
         "config.title"(title) {

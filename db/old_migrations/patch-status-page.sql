@@ -8,6 +8,7 @@ CREATE TABLE [status_page](
     [description] TEXT,
     [icon] VARCHAR(255) NOT NULL,
     [theme] VARCHAR(30) NOT NULL,
+    [display_mode] VARCHAR(30) NOT NULL DEFAULT 'default',
     [published] BOOLEAN NOT NULL DEFAULT 1,
     [search_engine_index] BOOLEAN NOT NULL DEFAULT 1,
     [show_tags] BOOLEAN NOT NULL DEFAULT 0,

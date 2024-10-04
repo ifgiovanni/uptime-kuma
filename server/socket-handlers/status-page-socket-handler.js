@@ -158,6 +158,7 @@ module.exports.statusPageSocketHandler = (socket) => {
             statusPage.icon = config.logo;
             statusPage.autoRefreshInterval = config.autoRefreshInterval,
             statusPage.theme = config.theme;
+            statusPage.display_mode = config.displayMode;
             //statusPage.published = ;
             //statusPage.search_engine_index = ;
             statusPage.show_tags = config.showTags;
@@ -281,6 +282,7 @@ module.exports.statusPageSocketHandler = (socket) => {
             statusPage.slug = slug;
             statusPage.title = title;
             statusPage.theme = "auto";
+            statusPage.display_mode = "default";
             statusPage.icon = "";
             statusPage.autoRefreshInterval = 300;
             await R.store(statusPage);
