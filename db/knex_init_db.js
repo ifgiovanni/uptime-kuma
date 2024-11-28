@@ -193,6 +193,7 @@ async function createTables() {
         table.text("description");
         table.string("icon", 255).notNullable();
         table.string("theme", 30).notNullable();
+        table.string("display_mode", 30).notNullable().defaultTo("default");
         table.boolean("published").notNullable().defaultTo(true);
         table.boolean("search_engine_index").notNullable().defaultTo(true);
         table.boolean("show_tags").notNullable().defaultTo(false);

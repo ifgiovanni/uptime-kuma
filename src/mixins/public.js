@@ -19,10 +19,14 @@ export default {
     computed: {
         publicMonitorList() {
             let result = {};
-
             for (let group of this.publicGroupList) {
                 for (let monitor of group.monitorList) {
                     result[monitor.id] = monitor;
+                    if (monitor.type === "group" && monitor.children) {
+                        for (let child of monitor.children) {
+                            result[child.id] = child;
+                        }
+                    }
                 }
             }
             return result;
@@ -36,7 +40,6 @@ export default {
                     result[monitorID] = this.lastHeartbeatList[monitorID];
                 }
             }
-
             return result;
         },
 

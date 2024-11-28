@@ -530,6 +530,7 @@ class Database {
             statusPage.description = await Settings.get("description");
             statusPage.icon = await Settings.get("icon");
             statusPage.theme = await Settings.get("statusPageTheme");
+            statusPage.display_mode = await Settings.get("statusPageDisplayMode");
             statusPage.published = !!await Settings.get("statusPagePublished");
             statusPage.search_engine_index = !!await Settings.get("searchEngineIndex");
             statusPage.show_tags = !!await Settings.get("statusPageTags");
@@ -545,6 +546,10 @@ class Database {
 
             if (!statusPage.theme) {
                 statusPage.theme = "light";
+            }
+
+            if (!statusPage.display_mode) {
+                statusPage.display_mode = "default";
             }
 
             let id = await R.store(statusPage);

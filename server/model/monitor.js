@@ -46,12 +46,26 @@ class Monitor extends BeanModel {
      * @returns {Promise<object>} Object ready to parse
      */
     async toPublicJSON(showTags = false, certExpiry = false) {
+        let childs = [];
+        if (this.type === "group") {
+            let childsIds = await Monitor.getAllChildrenIDs(this.id);
+            for (let childId of childsIds) {
+                let child = await R.load("monitor", childId);
+                if (child) {
+                    childs.push(await child.toPublicJSON(showTags, certExpiry));
+                }
+            }
+        }
         let obj = {
             id: this.id,
             name: this.name,
             sendUrl: this.sendUrl,
             type: this.type,
+            children: childs,
         };
+        if (this.description && this.description.trim().length > 0) {
+            obj.description = this.description;
+        }
 
         if (this.sendUrl) {
             obj.url = this.url;

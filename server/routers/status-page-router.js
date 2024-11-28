@@ -2,6 +2,7 @@ let express = require("express");
 const apicache = require("../modules/apicache");
 const { UptimeKumaServer } = require("../uptime-kuma-server");
 const StatusPage = require("../model/status_page");
+const Monitor = require("../model/monitor");
 const { allowDevAllOrigin, sendHttpError } = require("../util-server");
 const { R } = require("redbean-node");
 const { badgeConstants } = require("../../src/util");
@@ -79,6 +80,15 @@ router.get("/api/status-page/heartbeat/:slug", cache("1 minutes"), async (reques
         `, [
             statusPageID
         ]);
+
+        // for each monitor, if has childs fetch them too
+        for (let monitorID of monitorIDList) {
+            let monitor = await R.load("monitor", monitorID);
+            if (monitor.type === "group") {
+                let childMonitorIDList = await Monitor.getAllChildrenIDs(monitorID);
+                monitorIDList = monitorIDList.concat(childMonitorIDList);
+            }
+        }
 
         for (let monitorID of monitorIDList) {
             let list = await R.getAll(`
